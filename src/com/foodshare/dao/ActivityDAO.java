@@ -1,0 +1,6 @@
+package com.foodshare.dao;
+import java.sql.*; import java.util.*; import com.foodshare.database.DBConnection; import com.foodshare.model.ActivityPOJO;
+public class ActivityDAO {
+ public void logActivity(String email,String action,String description){String q="INSERT INTO activities(user_email,action_type,description) VALUES(?,?,?)";try(Connection c=DBConnection.getConnection();PreparedStatement p=c.prepareStatement(q)){p.setString(1,email);p.setString(2,action);p.setString(3,description);p.executeUpdate();}catch(SQLException e){System.err.println("[ActivityDAO] Log failed: "+e.getMessage());}}
+ public List<ActivityPOJO> getRecentActivities(String email){List<ActivityPOJO> out=new ArrayList<>();String q="SELECT id,user_email,action_type,description,created_at FROM activities WHERE lower(user_email)=lower(?) ORDER BY created_at DESC LIMIT 100";try(Connection c=DBConnection.getConnection();PreparedStatement p=c.prepareStatement(q)){p.setString(1,email);try(ResultSet r=p.executeQuery()){while(r.next()){ActivityPOJO a=new ActivityPOJO(r.getString("user_email"),r.getString("action_type"),r.getString("description"));a.setId(r.getInt("id"));a.setTimestamp(r.getString("created_at"));out.add(a);}}}catch(SQLException e){System.err.println("[ActivityDAO] Load failed: "+e.getMessage());}return out;}
+}
