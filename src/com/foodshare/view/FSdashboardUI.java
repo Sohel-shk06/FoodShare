@@ -1,3 +1,4 @@
+
 package com.foodshare.view;
 
 import java.awt.*;
@@ -6,55 +7,146 @@ import com.foodshare.model.UserSession;
 
 public class FSdashboardUI {
 
+    // ================= FRAME =================
+
     public Frame frame;
-    public Button donateFood, availableFood, myActivity, profile, logout, logoButton;
-    public Label donationsLabel, mealsLabel, peopleLabel;
+
+    // ================= BUTTONS =================
+
+    public Button donateFood;
+    public Button availableFood;
+    public Button myActivity;
+    public Button profile;
+    public Button logout;
+    public Button logoButton;
+
+    // ================= IMPACT LABELS =================
+
+    public Label donationsLabel;
+    public Label mealsLabel;
+    public Label peopleLabel;
+
+    // ================= HELPER: CREATE LABEL =================
+
+    public Label createLabel(
+            String text,
+            int fontStyle,
+            int fontSize,
+            Color foreground,
+            int alignment) {
+
+        Label label = new Label(text, alignment);
+        label.setFont(new Font("Arial", fontStyle, fontSize));
+        label.setForeground(foreground);
+
+        return label;
+    }
+
+    // ================= HELPER: CREATE BUTTON =================
+
+    public Button createButton(
+            String text,
+            int fontSize,
+            Color background,
+            Color foreground) {
+
+        Button button = new Button(text);
+        button.setFont(new Font("Arial", Font.BOLD, fontSize));
+        button.setBackground(background);
+        button.setForeground(foreground);
+
+        return button;
+    }
+
+    // ================= CREATE UI =================
 
     public void createUI() {
-        frame = new Frame("FoodShare - " + ("NGO".equalsIgnoreCase(UserSession.getInstance().getRole()) ? "NGO Dashboard" : "Donor Dashboard"));
+
+        UserSession session = UserSession.getInstance();
+
+        String userRole = session.getRole();
+        boolean isNGO = "NGO".equalsIgnoreCase(userRole);
+
+        // ================= MAIN FRAME =================
+
+        frame = new Frame(
+            "FoodShare - " +
+            (isNGO ? "NGO Dashboard" : "Donor Dashboard")
+        );
+
         frame.setSize(1000, 650);
         frame.setBackground(new Color(250, 247, 235));
         frame.setLayout(new BorderLayout());
 
-        UserSession session = UserSession.getInstance();
+        // Fetch live database statistics
         DonationDAO dao = new DonationDAO();
         int[] stats = dao.getImpactStats();
 
-        // HEADER
-        Panel headerPanel = new Panel(new BorderLayout(25, 5));
+        // ================= HEADER =================
+
+        Panel headerPanel = new Panel(
+            new BorderLayout(25, 5)
+        );
+
         headerPanel.setBackground(new Color(32, 82, 55));
         headerPanel.setPreferredSize(new Dimension(0, 80));
 
-        Label title = new Label("  FOODSHARE");
-        title.setFont(new Font("Arial", Font.BOLD, 25));
-        title.setForeground(Color.WHITE);
+        Label title = createLabel(
+            "FOODSHARE",
+            Font.BOLD,
+            25,
+            Color.WHITE,
+            Label.LEFT
+        );
 
-        Panel welcomePanel = new Panel(new GridLayout(2, 1));
+        // ================= WELCOME SECTION =================
+
+        Panel welcomePanel = new Panel(
+            new GridLayout(2, 1)
+        );
+
         welcomePanel.setBackground(new Color(32, 82, 55));
 
-        Label welcome = new Label("Welcome, " + session.getName() + " (" + session.getRole() + ")!");
-        welcome.setFont(new Font("Arial", Font.BOLD, 22));
-        welcome.setForeground(new Color(245, 220, 145));
+        Label welcome = createLabel(
+            "Welcome, " + session.getName() + " (" + userRole + ")!",
+            Font.BOLD,
+            22,
+            new Color(245, 220, 145),
+            Label.LEFT
+        );
 
-        Label message = new Label("Together we can eliminate food waste via database tracking.");
-        message.setFont(new Font("Arial", Font.PLAIN, 15));
-        message.setForeground(Color.WHITE);
+        Label message = createLabel(
+            "Together we can reduce food waste.",
+            Font.PLAIN,
+            15,
+            Color.WHITE,
+            Label.LEFT
+        );
 
         welcomePanel.add(welcome);
         welcomePanel.add(message);
 
-        Panel rightHeader = new Panel(new FlowLayout(FlowLayout.RIGHT, 12, 20));
+        // ================= RIGHT HEADER =================
+
+        Panel rightHeader = new Panel(
+            new FlowLayout(FlowLayout.RIGHT, 12, 20)
+        );
+
         rightHeader.setBackground(new Color(32, 82, 55));
 
-        logout = new Button("Logout");
-        logout.setFont(new Font("Arial", Font.BOLD, 12));
-        logout.setBackground(new Color(245, 224, 208));
-        logout.setForeground(new Color(100, 55, 40));
+        logout = createButton(
+            "Logout",
+            12,
+            new Color(240, 210, 190),
+            new Color(100, 45, 30)
+        );
 
-        logoButton = new Button("FS");
-        logoButton.setFont(new Font("Arial", Font.BOLD, 18));
-        logoButton.setBackground(new Color(245, 220, 145));
-        logoButton.setForeground(new Color(32, 82, 55));
+        logoButton = createButton(
+            "FS",
+            18,
+            new Color(245, 220, 145),
+            new Color(32, 82, 55)
+        );
 
         rightHeader.add(logout);
         rightHeader.add(logoButton);
@@ -63,26 +155,62 @@ public class FSdashboardUI {
         headerPanel.add(welcomePanel, BorderLayout.CENTER);
         headerPanel.add(rightHeader, BorderLayout.EAST);
 
-        // MAIN CONTENT
-        Panel mainPanel = new Panel(new BorderLayout(25, 10));
+        // ================= MAIN CONTENT =================
+
+        Panel mainPanel = new Panel(
+            new BorderLayout(25, 10)
+        );
+
         mainPanel.setBackground(new Color(250, 247, 235));
 
-        // LEFT SECTION (Impact + Contact)
-        Panel leftPanel = new Panel(new BorderLayout(10, 15));
+        // ================= LEFT SECTION =================
+
+        Panel leftPanel = new Panel(
+            new BorderLayout(10, 15)
+        );
+
         leftPanel.setBackground(new Color(250, 247, 235));
         leftPanel.setPreferredSize(new Dimension(270, 0));
 
-        // IMPACT PANEL (Live Database Counters)
-        Panel impactPanel = new Panel(new GridLayout(4, 1, 5, 5));
+        // ================= IMPACT PANEL =================
+
+        Panel impactPanel = new Panel(
+            new GridLayout(4, 1, 5, 5)
+        );
+
         impactPanel.setBackground(new Color(232, 232, 208));
 
-        Label impactTitle = new Label("LIVE DB IMPACT", Label.CENTER);
-        impactTitle.setFont(new Font("Arial", Font.BOLD, 17));
-        impactTitle.setForeground(new Color(32, 82, 55));
+        Label impactTitle = createLabel(
+            "LIVE DB IMPACT",
+            Font.BOLD,
+            17,
+            new Color(32, 82, 55),
+            Label.CENTER
+        );
 
-        donationsLabel = new Label(stats[0] + " Active Donations", Label.CENTER);
-        mealsLabel = new Label(stats[1] + " Meals Shared", Label.CENTER);
-        peopleLabel = new Label(stats[2] + " People Fed", Label.CENTER);
+        donationsLabel = createLabel(
+            stats[0] + " Active Donations",
+            Font.BOLD,
+            15,
+            new Color(55, 65, 50),
+            Label.CENTER
+        );
+
+        mealsLabel = createLabel(
+            stats[1] + " Meals Shared",
+            Font.BOLD,
+            15,
+            new Color(55, 65, 50),
+            Label.CENTER
+        );
+
+        peopleLabel = createLabel(
+            stats[2] + " People Fed",
+            Font.BOLD,
+            15,
+            new Color(55, 65, 50),
+            Label.CENTER
+        );
 
         impactPanel.add(impactTitle);
         impactPanel.add(donationsLabel);
@@ -91,17 +219,38 @@ public class FSdashboardUI {
 
         leftPanel.add(impactPanel, BorderLayout.CENTER);
 
-        // CONTACT PANEL
-        Panel contactPanel = new Panel(new GridLayout(3, 1, 2, 2));
+        // ================= CONTACT PANEL =================
+
+        Panel contactPanel = new Panel(
+            new GridLayout(3, 1, 2, 2)
+        );
+
         contactPanel.setBackground(new Color(245, 224, 208));
         contactPanel.setPreferredSize(new Dimension(270, 95));
 
-        Label contactTitle = new Label("Contact & DB Info", Label.CENTER);
-        contactTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        contactTitle.setForeground(new Color(110, 70, 50));
+        Label contactTitle = createLabel(
+            "Contact Us",
+            Font.BOLD,
+            15,
+            new Color(110, 55, 35),
+            Label.CENTER
+        );
 
-        Label foodShareEmail = new Label("foodshare@gmail.com", Label.CENTER);
-        Label mahekEmail = new Label("mahekbhatt502@gmail.com", Label.CENTER);
+        Label foodShareEmail = createLabel(
+            "foodshare@gmail.com",
+            Font.PLAIN,
+            13,
+            new Color(55, 45, 40),
+            Label.CENTER
+        );
+
+        Label mahekEmail = createLabel(
+            "mahekbhatt502@gmail.com",
+            Font.PLAIN,
+            13,
+            new Color(55, 45, 40),
+            Label.CENTER
+        );
 
         contactPanel.add(contactTitle);
         contactPanel.add(foodShareEmail);
@@ -109,43 +258,58 @@ public class FSdashboardUI {
 
         leftPanel.add(contactPanel, BorderLayout.SOUTH);
 
-        // ACTION BUTTONS GRID (2x2)
-        Panel buttonHolder = new Panel(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        // ================= ACTION BUTTONS =================
+
+        Panel buttonHolder = new Panel(
+            new FlowLayout(FlowLayout.CENTER, 0, 5)
+        );
+
         buttonHolder.setBackground(new Color(250, 247, 235));
 
-        Panel buttonPanel = new Panel(new GridLayout(2, 2, 18, 18));
+        Panel buttonPanel = new Panel(
+            new GridLayout(2, 2, 18, 18)
+        );
+
         buttonPanel.setBackground(new Color(250, 247, 235));
         buttonPanel.setPreferredSize(new Dimension(600, 410));
 
-        donateFood = new Button("Donate Food (DB Entry)");
-        donateFood.setFont(new Font("Arial", Font.BOLD, 17));
-        donateFood.setBackground(new Color(220, 235, 215));
-        donateFood.setForeground(new Color(32, 82, 55));
+        // Donate / NGO Pickups
+        donateFood = createButton(
+            isNGO ? "My Claimed Pickups" : "Donate Food (DB Entry)",
+            17,
+            new Color(220, 235, 215),
+            new Color(32, 82, 55)
+        );
 
-        availableFood = new Button("Available Food (Live Feed)");
-        availableFood.setFont(new Font("Arial", Font.BOLD, 17));
-        availableFood.setBackground(new Color(248, 218, 200));
-        availableFood.setForeground(new Color(110, 60, 40));
+        // Browse / Claim Food
+        availableFood = createButton(
+            isNGO ? "Browse & Claim Food" : "Browse Available Food",
+            17,
+            new Color(248, 218, 200),
+            new Color(110, 60, 40)
+        );
 
-        myActivity = new Button("My Activity (Audit Log)");
-        myActivity.setFont(new Font("Arial", Font.BOLD, 17));
-        myActivity.setBackground(new Color(245, 220, 145));
-        myActivity.setForeground(new Color(80, 65, 25));
+        myActivity = createButton(
+            "My Activity (Audit Log)",
+            17,
+            new Color(245, 220, 145),
+            new Color(80, 65, 25)
+        );
 
-        profile = new Button("Profile (DB Record)");
-        profile.setFont(new Font("Arial", Font.BOLD, 17));
-        profile.setBackground(new Color(200, 205, 155));
-        profile.setForeground(new Color(55, 70, 35));
+        profile = createButton(
+            "Profile (DB Record)",
+            17,
+            new Color(200, 205, 155),
+            new Color(55, 70, 35)
+        );
 
-        if ("NGO".equalsIgnoreCase(session.getRole())) {
-            donateFood.setLabel("My Claimed Pickups");
-            availableFood.setLabel("Browse & Claim Food");
+        // Preserve role-specific button order
+        if (isNGO) {
             buttonPanel.add(availableFood);
             buttonPanel.add(donateFood);
             buttonPanel.add(myActivity);
             buttonPanel.add(profile);
         } else {
-            availableFood.setLabel("Browse Available Food");
             buttonPanel.add(donateFood);
             buttonPanel.add(myActivity);
             buttonPanel.add(profile);
@@ -157,18 +321,31 @@ public class FSdashboardUI {
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(buttonHolder, BorderLayout.CENTER);
 
-        Panel dashboardPanel = new Panel(new BorderLayout(15, 15));
+        // ================= DASHBOARD PANEL =================
+
+        Panel dashboardPanel = new Panel(
+            new BorderLayout(15, 15)
+        );
+
         dashboardPanel.setBackground(new Color(250, 247, 235));
         dashboardPanel.setPreferredSize(new Dimension(930, 560));
 
         dashboardPanel.add(headerPanel, BorderLayout.NORTH);
         dashboardPanel.add(mainPanel, BorderLayout.CENTER);
 
-        Panel outerPanel = new Panel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+        // ================= OUTER PANEL =================
+
+        Panel outerPanel = new Panel(
+            new FlowLayout(FlowLayout.CENTER, 25, 25)
+        );
+
         outerPanel.setBackground(new Color(250, 247, 235));
         outerPanel.add(dashboardPanel);
 
         frame.add(outerPanel, BorderLayout.CENTER);
+
+        // ================= SHOW FRAME =================
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
