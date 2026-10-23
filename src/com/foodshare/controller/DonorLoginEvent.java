@@ -28,6 +28,8 @@ public class DonorLoginEvent implements ActionListener, MouseListener {
                 gui.dispose();
                 FSdashboardUI dashboard = new FSdashboardUI();
                 dashboard.createUI();
+                 dashboard.frame.setLocationRelativeTo(null);
+    dashboard.frame.setVisible(true);
                 new FSdashboardEvents(dashboard);
             } else {
                 new MessageDialog(gui, "Login Failed", "Invalid donor credentials. Please register or re-check.");

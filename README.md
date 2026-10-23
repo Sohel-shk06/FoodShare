@@ -24,10 +24,10 @@ The app expects these environment variables:
 Open a **new PowerShell** terminal from the project folder. Set the actual values from your Supabase project, then run the app in that same terminal:
 
 ```powershell
-$env:SUPABASE_JDBC_URL = "jdbc:postgresql://YOUR_DB_HOST:5432/postgres?sslmode=require"
-$env:SUPABASE_DB_USER = "YOUR_DB_USERNAME"
-$env:SUPABASE_DB_PASSWORD = "YOUR_DB_PASSWORD"
-run_no_maven.bat
+$env:SUPABASE_JDBC_URL = "jdbc:postgresql://db.pcgahfpoizkczzmctpbu.supabase.co:5432/postgres?sslmode=require"
+$env:SUPABASE_DB_USER = "postgres"
+$env:SUPABASE_DB_PASSWORD = ""
+compile_and_run.bat
 ```
 
 Replace every `YOUR_...` value with the exact value from Supabase. These are session-only environment variables; opening a new terminal means setting them again. For persistent configuration use Windows Environment Variables, but do not commit secrets or share screenshots containing them.
@@ -36,7 +36,7 @@ Replace every `YOUR_...` value with the exact value from Supabase. These are ses
 - Install JDK 11+ (Maven is not required).
 - Ensure the four tables exist by running `resources/schema.sql` in Supabase SQL Editor.
 - Set the three environment variables above.
-- Run `run_no_maven.bat`, or run `compile_and_run.bat` from the same configured terminal.
+- Run `compile_and_run.bat` from the same configured terminal.
 - Register a donor first, then sign in as that donor to create a donation. Register an NGO separately, sign in as the NGO, browse available food and claim it. Each user sees only their own activity history; NGOs see their own claimed pickups.
 
 ## Security warning: direct JDBC in a desktop app

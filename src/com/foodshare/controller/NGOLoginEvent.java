@@ -25,12 +25,15 @@ public class NGOLoginEvent implements ActionListener, MouseListener {
 
             boolean ok = authService.loginNgo(email, password);
             if (ok) {
-                gui.dispose();
-                FSdashboardUI dashboard = new FSdashboardUI();
-                dashboard.createUI();
-                new FSdashboardEvents(dashboard);
+                if (ok) {
+                    FSdashboardUI dashboard = new FSdashboardUI();
+                    dashboard.createUI();
+                    new FSdashboardEvents(dashboard);
+                    gui.dispose();
+                }
             } else {
-                new MessageDialog(gui, "Login Failed", "Invalid NGO credentials. Please register first.");
+                new MessageDialog(gui, "Login Failed",
+                        "Invalid NGO credentials. Please register first.");
             }
         } else if (e.getSource() == gui.back) {
             gui.dispose();
@@ -45,8 +48,15 @@ public class NGOLoginEvent implements ActionListener, MouseListener {
         }
     }
 
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
 }
